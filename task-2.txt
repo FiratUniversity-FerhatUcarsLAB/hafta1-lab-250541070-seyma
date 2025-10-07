@@ -1,4 +1,109 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541070
+AD-SOYAD:şeyma nur katar
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+Hangi Monopoly hamlesinin en iyi olduğunu belirlemek, oyunun durumuna, oyuncuların pozisyonlarına ve risk toleransına bağlı karmaşık bir karar olabilir. İşte bu kararı vermek için kullanılabilecek adım adım bir pseudocode taslağı.
+
+Bu pseudocode, temel olarak mevcut durumda en çok beklenen değeri veya uzun vadeli avantajı sunan hamleyi seçmeye odaklanacaktır.
+
+Monopoly En İyi Hamle Seçimi Pseudocode
+Kod snippet'i
+
+FONKSIYON EnIyiHamleyiSec(oyuncu, oyunDurumu)
+  // En iyi hamleyi ve beklenen değerini saklamak için değişkenler
+  enIyiPuan = -Sonsuz
+  enIyiHamle = BOS
+
+  // 1. Zindandan Kurtulma Kontrolü (Öncelikli)
+  EĞER oyuncu Zindanda İSE VE oyuncu.ZindanCikisKartiVar() İSE
+    // Kart kullanmak genellikle iyi bir hamledir
+    hamle = Hamle(ZindandanCik, KartKullan)
+    puan = BeklenenDegeriHesapla(oyuncu, oyunDurumu, hamle)
+    enIyiPuan = puan
+    enIyiHamle = hamle
+    // Diğer seçenekleri de kontrol edebiliriz (para ödeme, zar atma),
+    // ancak kart genellikle en iyisidir.
+    // Şimdilik kartı en iyi hamle olarak kabul edip devam edelim.
+
+  // 2. Gayrimenkul Geliştirme Kontrolü (İnşaat)
+  // Mümkün olan tüm inşaatları değerlendir
+  FOREACH mülk IN oyuncu.Mülkler
+    EĞER mülk.GrupTamamlandı() VE mülk.Gelistirilebilir() İSE
+      // Ev/otel eklemek için beklenen kira artışı ve yatırım maliyeti dengesi
+      hamle = Hamle(InsaatYap, mülk)
+      puan = BeklenenDegeriHesapla(oyuncu, oyunDurumu, hamle)
+
+      EĞER puan > enIyiPuan İSE
+        enIyiPuan = puan
+        enIyiHamle = hamle
+
+  // 3. Gayrimenkul Alım/Satım Kontrolü (Ticaret/Açık Artırma)
+  // Diğer oyuncularla olası takasları veya açık artırmadan alımları değerlendir.
+  // Bu kısmı simüle etmek çok karmaşık olduğu için basitleştirilmiş bir yaklaşım kullanalım.
+  // Oyun sonuna doğru grup tamamlamak için kritik takasları önceliklendir.
+
+  FOREACH takasTeklifi IN OlasıTicaretler(oyuncu, oyunDurumu)
+    // Teklifin uzun vadeli değerini değerlendir
+    hamle = Hamle(TicaretYap, takasTeklifi)
+    puan = BeklenenDegeriHesapla(oyuncu, oyunDurumu, hamle)
+
+    EĞER puan > enIyiPuan İSE
+      enIyiPuan = puan
+      enIyiHamle = hamle
+
+  // 4. İpotek/İpotekten Kurtarma Kontrolü
+  // İpotekli mülkleri kurtarmak (gelir elde etmek için)
+  FOREACH mülk IN oyuncu.IpotekliMülkler
+    EĞER oyuncu.Para >= mülk.IpotekKurtarmaMaliyeti() İSE
+      hamle = Hamle(IpotektenKurtar, mülk)
+      puan = BeklenenDegeriHesapla(oyuncu, oyunDurumu, hamle)
+
+      EĞER puan > enIyiPuan İSE
+        enIyiPuan = puan
+        enIyiHamle = hamle
+
+  // Para kazanmak için mülk ipoteklemek (zor durumda veya inşaat için)
+  EĞER oyuncu.Para < 0 VEYA (oyuncu.Para < InsaatMaliyeti() VE enIyiHamle == InsaatYapmaHamlesi) İSE
+    FOREACH mülk IN oyuncu.Mülkler
+      EĞER mülk.IpotekliDegil() İSE
+        hamle = Hamle(IpotekEt, mülk)
+        // İpotek etme hamlesini en son çare olarak veya sadece bir inşaat için gerekli parayı toplamak için değerlendir.
+        // Bu hamlenin puanlaması diğerlerinden farklı olmalı (acil nakit akışı sağlaması)
+
+  // 5. Parayı Saklama (Boş Hamle)
+  // Başka iyi bir hamle yoksa parayı tutmak.
+  EĞER enIyiHamle == BOS İSE
+    enIyiHamle = Hamle(PasGec)
+
+  GERİ DÖN enIyiHamle
+
+---
+
+### Yardımcı Fonksiyon: Beklenen Değeri Hesapla
+
+```pseudocode
+FONKSIYON BeklenenDegeriHesapla(oyuncu, oyunDurumu, hamle)
+  // Bu fonksiyon, bir hamlenin uzun vadeli parasal etkisini tahmin eder.
+  // (Kira gelirindeki artış, yatırım maliyeti, iflas etme riski azalması vb.)
+
+  // Örnek basitleştirme:
+  EĞER hamle.Tipi == InsaatYap İSE
+    yatirimMaliyeti = hamle.Mülk.EvMaliyeti()
+    // Yeni kiradan elde edilecek beklenen gelir artışını hesapla
+    beklenenKiraArtisi = HesaplaKiraArtisi(hamle.Mülk, oyunDurumu) // Zar olasılıklarını kullanarak
+    // Risk değerlendirmesi: Bu yatırım oyuncuyu iflasa sürükler mi?
+    riskFaktoru = HesaplaIflasRiski(oyuncu, yatirimMaliyeti)
+
+    puan = (beklenenKiraArtisi * 10 Tur) - yatirimMaliyeti - riskFaktoru
+
+  EĞER hamle.Tipi == IpotektenKurtar İSE
+    maliyet = hamle.Mülk.IpotekKurtarmaMaliyeti()
+    beklenenKira = HesaplaKira(hamle.Mülk, oyunDurumu)
+
+    puan = (beklenenKira * 10 Tur) - maliyet
+
+  EĞER hamle.Tipi == TicaretYap İSE
+    // Çok karmaşık; elde edilen mülk grubu ve kaybedilen mülk/para dengesi değerlendirilir
+    puan = (YeniMülkGrubununBeklenenDegeri - KaybedilenMülklerinDegeri - VerilenPara) / 2
+
+  GERİ DÖN puan
