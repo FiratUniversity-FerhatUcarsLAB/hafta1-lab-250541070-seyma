@@ -1,4 +1,72 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541070
+AD-SOYAD:şeyma nur katar
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+FONKSIYON SekilOlustur(HedefSekil)
+  // 1. Planlama ve Hazırlık
+  BASLANGIC
+    // Hedef şeklin görselini veya talimatlarını incele.
+    HEDEF_SEKIL_ANALIZI = SekilOzellikleriniBelirle(HedefSekil)
+    // Gerekli parçaların bir listesini oluştur.
+    GEREKLI_PARCA_LISTESI = ParcaListesiOlustur(HEDEF_SEKIL_ANALIZI)
+    // Parçaların depolandığı alanı hazırla (kutu/masa).
+    ParcaAlaniniHazirla()
+    // Şeklin yapısal bütünlüğünü sağlamak için bir temel oluşturulacak mı?
+    EGER (TemelGerekiyorsa) ISE
+      TEMEL_PARCA = EnBuyukParcayiSec(GEREKLI_PARCA_LISTESI)
+      // Temel parçayı çalışma yüzeyine yerleştir ve onu başlangıç noktası olarak ayarla.
+      SuAnkiYapi = TEMEL_PARCA
+    DEGILSE
+      // İlk kullanılacak parçayı başlangıç noktası olarak ayarla.
+      SuAnkiYapi = BOS
+    SON_EGER
+
+  // 2. Yapım Süreci
+  ADIM
+    // GEREKLI_PARCA_LISTESI boşalana kadar veya hedef şekil tamamlanana kadar döngü.
+    TUM_PARCALAR_KULLANILANA_KADAR_VEYA_SEKIL_TAMAMLANANA_KADAR TEKRARLA
+
+      // İhtiyaç duyulan bir sonraki parçayı belirle.
+      SONRAKI_ADIM_GEREKLI_PARCA = ParcaSecimiYap(HEDEF_SEKIL_ANALIZI, SuAnkiYapi)
+
+      // Belirlenen parçayı depolama alanından bul.
+      BULUNAN_PARCA = ParcaBul(SONRAKI_ADIM_GEREKLI_PARCA)
+
+      // Parça bulunamazsa:
+      EGER (BULUNAN_PARCA == YOK) ISE
+        HATA_KAYDI_OLUSTUR("Gerekli parça depoda yok:", SONRAKI_ADIM_GEREKLI_PARCA)
+        // Alternatif parça ara veya durdur.
+        ALTERNATIF_PARCA = AlternatifAra(SONRAKI_ADIM_GEREKLI_PARCA)
+        EGER (ALTERNATIF_PARCA != YOK) ISE
+          BULUNAN_PARCA = ALTERNATIF_PARCA
+        DEGILSE
+          CIK
+        SON_EGER
+      SON_EGER
+
+      // Parçayı mevcut yapıya ekle.
+      YENI_YAPI = ParcaEkle(SuAnkiYapi, BULUNAN_PARCA, HEDEF_SEKIL_ANALIZI.Konum)
+      SuAnkiYapi = YENI_YAPI
+
+      // Kullanılan parçayı GEREKLI_PARCA_LISTESI'nden çıkar.
+      GEREKLI_PARCA_LISTESI.Cikar(BULUNAN_PARCA)
+
+      // Gerekirse yapının fotoğrafını çek veya ilerlemeyi kaydet.
+      IlerlemeKaydiYap(SuAnkiYapi)
+
+    SON_TEKRARLA
+
+  // 3. Kontrol ve Sonuç
+  SONUC
+    // Oluşturulan yapıyı hedef şekille karşılaştır.
+    EGER (SuAnkiYapi TamamenEslesiyor HedefSekil) ISE
+      CIKTI("Şekil başarıyla tamamlandı.")
+    DEGILSE
+      CIKTI("Şekil tamamlandı ancak eksiklikler/hatalar mevcut. Kontrol ediliyor...")
+      // Hata Ayıklama (Gerekirse)
+      HataAyikla(SuAnkiYapi, HedefSekil)
+    SON_EGER
+    
+    GERI_DON (SuAnkiYapi)
+
+SON_FONKSIYON
