@@ -1,4 +1,33 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541070
+AD-SOYAD:şeyma nur katar
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+Başla
+
+  // Yurt yemek saatlerini belirle
+  KahvaltıSaati = "07:30"
+  ÖğleYemekSaati = "12:30"
+  AkşamYemekSaati = "18:30"
+
+  // Kullanıcıdan saati al
+  KullaniciSaati = KullanıcıdanSaatAl()
+
+  // Kahvaltı saati kontrolü
+  Eğer (KullaniciSaati >= KahvaltıSaati - 30 ve KullaniciSaati < KahvaltıSaati + 30) ise
+    Yaz("Kahvaltı saati şu an! Afiyet olsun.")
+  Aksi takdirde
+    Yaz("Kahvaltı saati geçti veya henüz gelmedi.")
+
+  // Öğle yemeği saati kontrolü
+  Eğer (KullaniciSaati >= ÖğleYemekSaati - 30 ve KullaniciSaati < ÖğleYemekSaati + 30) ise
+    Yaz("Öğle yemeği saati şu an! Afiyet olsun.")
+  Aksi takdirde
+    Yaz("Öğle yemeği saati geçti veya henüz gelmedi.")
+
+  // Akşam yemeği saati kontrolü
+  Eğer (KullaniciSaati >= AkşamYemekSaati - 30 ve KullaniciSaati < AkşamYemekSaati + 30) ise
+    Yaz("Akşam yemeği saati şu an! Afiyet olsun.")
+  Aksi takdirde
+    Yaz("Akşam yemeği saati geçti veya henüz gelmedi.")
+
+Bitiş
