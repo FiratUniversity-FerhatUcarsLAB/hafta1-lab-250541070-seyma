@@ -1,4 +1,50 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541070
+AD-SOYAD:şeyma nur katar
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+FONKSIYON MÜKEMMEL_OMLET_YAP
+
+    // 1. GEREÇLERİ HAZIRLA
+    GEREÇLER_LİSTESİ = [Yumurta (2-3 adet), Tuz, Karabiber, Tereyağı/Yağ, İsteğe Bağlı İç Malzemeler (Peynir, Otlar vb.)]
+    TAVA = Yapışmaz, 8-10 inç (20-25 cm)
+
+    // 2. YUMURTALARI KIR VE ÇIRP
+    ADIM 1: YUMURTALARI_KASEYE_KIR(YUMURTA)
+    ADIM 2: Ekle(Tuz, Karabiber)
+    ADIM 3: ÇIRP(YUMURTALAR, HIZLI_VE_HAVALI)
+        // Amaç: Sarısı ve beyazı tamamen karışmış, hafif köpüklü bir karışım elde etmek.
+
+    // 3. TAVAYI ISIT
+    ADIM 4: OCAĞI_AÇ(ORTA-DÜŞÜK_ISI)
+    ADIM 5: Ekle(TAVA, Tereyağı/Yağ)
+        // Amaç: Tereyağı erisin ve köpürmeyi bıraksın (kahverengileşmesin). Tavanın tabanını kaplasın.
+
+    // 4. PİŞİRME
+    ADIM 6: Yumurta_Karışımını_Tavaya_Dök()
+    ADIM 7: BEKLE(30_saniye)
+        // Amaç: Kenarların hemen katılaşmaya başlamasını sağlamak.
+
+    ADIM 8: Kenarları_İçeri_İt_Ve_Tavayı_Eğ_Döngüsü(3-4_kez)
+        // Amaç: Altı pişerken üstteki sıvı yumurtanın tavanın altına akmasını sağlamak.
+        DÖNGÜ: KENAR_KATILAŞANA_KADAR
+            A_Kenarından_Katılaşanı_İçeri_İt()
+            Tavayı_A_Kenarına_Doğru_Eğ()
+            Sıvı_Yumurtanın_Alttaki_Boşluğa_Akmasını_Sağla()
+        DÖNGÜ_SONU
+
+    // 5. İÇ MALZEMELERİ EKLE (İsteğe bağlı)
+    EĞER (İÇ_MALZEMELER_MEVCUT) İSE
+        ADIM 9: İç_Malzemeleri_Omletin_Yarısına_Serp()
+        // NOT: İç malzemeler bu aşamada omletin yüzeyi hala nemliyken eklenmeli.
+    EĞER_SONU
+
+    // 6. KATLAMA VE SONUÇ
+    ADIM 10: Tavanın_Kolunu_Tut_Ve_Hafifçe_Çırp()
+        // Amaç: Omletin tavada serbestçe kaymasını sağlamak.
+
+    ADIM 11: Omleti_Tabağa_Kaydır_Ve_Katla()
+        // YÖNTEM: Omleti ikiye veya üçe katlayarak tabağa düzgünce servis et.
+
+    ADIM 12: Servis_Yap()
+
+SON_FONKSIYON
