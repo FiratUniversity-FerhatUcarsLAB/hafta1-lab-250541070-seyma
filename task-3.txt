@@ -1,4 +1,75 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541070
+AD-SOYAD:şeyma nur katar
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+FONKSIYON MuzikKoleksiyonunuDuzenle(koleksiyon_ana_klasoru)
+  
+  // 1. Koleksiyondaki Tüm Dosyaları Tara
+  DOSYA_LISTESI = DosyalariTara(koleksiyon_ana_klasoru, [".mp3", ".flac", ".m4a", ".ogg"])
+  TOPLAM_DOSYA_SAYISI = Uzunluk(DOSYA_LISTESI)
+  
+  EkranaYaz("--- Başlatılıyor: " + TOPLAM_DOSYA_SAYISI + " dosya bulundu. ---")
+  
+  YENI_KLASOR_YOLU = koleksiyon_ana_klasoru + "/DuzenlenmisMuzikler"
+  KlasorOlustur(YENI_KLASOR_YOLU)
+  
+  // 2. Her Bir Müzik Dosyası İçin İşlemleri Uygula
+  FOR her_dosya IN DOSYA_LISTESI YAP
+    
+    EkranaYaz("İşleniyor: " + dosya_adi(her_dosya))
+    
+    // a. ID3 Etiketlerini (Metadata) Oku
+    ETIKETLER = ID3EtiketleriniOku(her_dosya)
+    
+    // b. Eksik Veya Standart Olmayan Etiketleri Tamamla/Duzelt
+    IF EtiketBosMu(ETIKETLER["Sanatci"]) VEYA EtiketBosMu(ETIKETLER["Album"]) VEYA EtiketBosMu(ETIKETLER["Baslik"]) YAP
+      
+      // Tahmin/Arama yap (örneğin dosya adı veya parmak izi ile)
+      YENI_ETIKETLER = MetadataTahminEt(her_dosya, ETIKETLER)
+      
+      // Tahmin başarılıysa Güncelle
+      IF YENI_ETIKETLER Başarılı Mı YAP
+        ETIKETLER = YENI_ETIKETLER
+        ID3EtiketleriniYaz(her_dosya, ETIKETLER)
+        EkranaYaz("  -> Etiketler güncellendi.")
+      ELSE
+        EkranaYaz("  -> Etiket bilgisi eksik, otomatik düzeltilemedi.")
+      END IF
+      
+    END IF
+    
+    // c. Dosya Adını Etiketlere Göre Standartlaştır
+    // Biçim: "TrackNumara - Sanatci - Baslik.uzanti"
+    YENI_DOSYA_ADI = EtiketDegeriniAl(ETIKETLER["SiraNo"]) + " - " + \
+                     EtiketDegeriniAl(ETIKETLER["Sanatci"]) + " - " + \
+                     EtiketDegeriniAl(ETIKETLER["Baslik"]) + DosyaUzantisiniAl(her_dosya)
+                     
+    // Geçersiz karakterleri temizle
+    YENI_DOSYA_ADI = KarakterleriTemizle(YENI_DOSYA_ADI)
+    
+    // d. Dosyayı Yeni, Düzenli Klasör Yapısına Taşı
+    
+    // Yeni yol yapısı: YENI_KLASOR_YOLU / Sanatci / Album / YeniDosyaAdi
+    HEDEF_SANATCI_KLASORU = YENI_KLASOR_YOLU + "/" + KarakterleriTemizle(EtiketDegeriniAl(ETIKETLER["Sanatci"]))
+    HEDEF_ALBUM_KLASORU = HEDEF_SANATCI_KLASORU + "/" + KarakterleriTemizle(EtiketDegeriniAl(ETIKETLER["Album"]))
+    
+    KlasorOlustur(HEDEF_SANATCI_KLASORU)
+    KlasorOlustur(HEDEF_ALBUM_KLASORU)
+    
+    HEDEF_TAM_YOL = HEDEF_ALBUM_KLASORU + "/" + YENI_DOSYA_ADI
+    
+    DosyaTasi(her_dosya, HEDEF_TAM_YOL)
+    EkranaYaz("  -> Taşıma başarılı: " + HEDEF_TAM_YOL)
+    
+    EkranaYaz("------------------------------------")
+    
+  END FOR
+  
+  // 3. Bitirme İşlemi
+  
+  // Orijinal ana klasörde kalan boş klasörleri temizle (isteğe bağlı)
+  BosKlasorleriTemizle(koleksiyon_ana_klasoru)
+  
+  EkranaYaz("--- BİTTİ: Müzik koleksiyonu düzenlemesi tamamlandı. ---")
+
+SON FONKSIYON
